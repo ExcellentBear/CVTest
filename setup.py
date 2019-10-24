@@ -11,5 +11,5 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     platforms="any",
-    install_requires=["opencv-python", "PIL", "facenet", "numpy", "tensorflow", "PyQt5"]
+    install_requires=["opencv-python", "pillow", "facenet", "numpy", "tensorflow", "PyQt5"]
 )
