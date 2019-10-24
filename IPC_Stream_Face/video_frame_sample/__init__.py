@@ -51,7 +51,7 @@ class CaptureThread(Thread):
 
     def set_src(self, src):
         if self.src == src:
-            return 
+            return
         self.src = src
         self.signal = True
 
