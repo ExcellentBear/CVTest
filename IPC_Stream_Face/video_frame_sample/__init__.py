@@ -11,7 +11,7 @@ __all__ = ["MStack", "CaptureThread"]
 
 class MStack:
     def __init__(self, max_size=100):
-        self.index = 0
+        self.index = -1
         max_size = max_size if max_size > 1 else 1
         self.deque = [None]*max_size
         self.__max_size = max_size
@@ -33,8 +33,8 @@ class MStack:
 
     def push(self, item: np.ndarray):
         with self.__mutex:
+            self.index = (self.index + 1) % self.__max_size
             self.deque[self.index] = item
-            self.index = (self.index+1) % self.__max_size
 
 
 class CaptureThread(Thread):
