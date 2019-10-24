@@ -24,11 +24,12 @@ class MStack:
 
     def fetch_last_pic(self, from_index, size=5)->[np.ndarray]:
         ret = []
-        for _ in range(size):
-            arr, _ = self.deque[from_index]
-            if arr is not None:
-                ret.append(arr)
-            from_index = (from_index - 1) % self.__max_size
+        with self.__mutex:
+            for _ in range(size):
+                arr, _ = self.deque[from_index]
+                if arr is not None:
+                    ret.append(arr)
+                from_index = (from_index - 1) % self.__max_size
         return ret
 
     def push(self, item: np.ndarray):
@@ -42,19 +43,24 @@ class CaptureThread(Thread):
         super().__init__()
         self.frame_buff = frame_buff
         self.cap = cv2.VideoCapture(src)
-        self.__mutex = Lock()
+        self.signal = False
+        self.src = src
 
     def get(self)->[Optional[np.ndarray], int]:
         return self.frame_buff.pop()
 
     def set_src(self, src):
-        with self.__mutex:
-            self.cap.release()
-            self.cap = cv2.VideoCapture(src)
+        if self.src == src:
+            return 
+        self.src = src
+        self.signal = True
 
     def run(self):
         while True:
-            with self.__mutex:
+                if self.signal:
+                    self.signal = False
+                    self.cap.release()
+                    self.cap = cv2.VideoCapture(self.src)
                 bl, frame = self.cap.read()
                 if bl:
                     self.frame_buff.push(frame)

@@ -6,8 +6,11 @@ from pyqt_uis.sample_ui import MyWindow
 
 
 if __name__ == '__main__':
-    src = "http://ivi.bupt.edu.cn/hls/cctv6hd.m3u8"  # 或者ip摄像头地址
+    src = [
+        "rtmp://media3.sinovision.net:1935/live/livestream",
+        "http://ivi.bupt.edu.cn/hls/cctv6hd.m3u8",  # 或者ip摄像头地址
+    ]
     q = QApplication([])
-    w = MyWindow([src], None)
+    w = MyWindow(src, None)
     w.show()
     q.exec()

@@ -29,13 +29,13 @@ class MyWindow(QMainWindow):
         lay.addWidget(self.com_box, 1)
         lay.addWidget(self.widget, 10)
         lay.addWidget(self.label, 1)
-        self.remote_address = self.com_box.currentText()
+        remote_address = self.com_box.currentText()
         self.com_box.currentTextChanged.connect(self.item_change)
 
         self.Recon = Recon()
 
         self.stack = MStack()
-        self.cap_thread = CaptureThread(self.remote_address, self.stack)
+        self.cap_thread = CaptureThread(remote_address, self.stack)
         self.cap_thread.start()
 
         self.tm = QTimer(self)
@@ -55,7 +55,6 @@ class MyWindow(QMainWindow):
         self.widget.update()
 
     def item_change(self, text):
-        self.remote_address = text
         self.cap_thread.set_src(text)
 
     def get_image_sample(self):
